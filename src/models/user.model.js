@@ -40,6 +40,14 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
+    otp: {
+      type: String,
+      default: '0000'
+    },
+    verified: {
+      type: Boolean,
+      default: false
+    },
   },
   {
     timestamps: true,

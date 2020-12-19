@@ -39,8 +39,17 @@ const sendResetPasswordEmail = async (to, token) => {
   await sendEmail(to, subject, text);
 };
 
+const sendOTP = async (to, otp) => {
+  const subject = 'Verify Your Account';
+  const text = `Dear user,
+  To verify your password, enter this code into your app : ${otp}
+  If you did not register to GumTree, then ignore this email.`;
+  await sendEmail(to, subject, text);
+};
+
 module.exports = {
   transport,
   sendEmail,
   sendResetPasswordEmail,
+  sendOTP,
 };
