@@ -2,7 +2,6 @@ const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const path = require('path');
-const pug = require('pug');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
@@ -54,7 +53,7 @@ if (config.env === 'production') {
 }
 
 // v1 api routes
-app.use('/', routes);
+app.use('/v1', routes);
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
@@ -66,10 +65,5 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
-//additionally added by amit
-app.set('views', path.join(__dirname, 'views'));
-app.use('/static',express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'pug');
 
 module.exports = app;
