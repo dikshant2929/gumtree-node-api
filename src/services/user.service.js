@@ -13,6 +13,7 @@ const createUser = async (userBody) => {
   }
   let otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
   userBody.otp = otp;
+  userBody.status = 1;
   const user = await User.create({...userBody});
   sendOTP(userBody.email, otp);
   return user;

@@ -36,6 +36,7 @@ const resetPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+
 module.exports = {
   register,
   login,
