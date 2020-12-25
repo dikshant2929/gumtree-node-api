@@ -43,6 +43,15 @@ module.exports = {
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: 10,
   },
+  file : {
+    imageSize : 2 * 1024 * 1024,
+    imageUploadPath : 'static/uploads/'
+  },
+  imageKitObj : {
+    publicKey : envVars.IKTPUBLICKKEY,
+    privateKey : envVars.IKTPRIVATEKEY,
+    urlEndpoint : envVars.IKTURL
+  },
   email: {
     smtp: {
       host: envVars.SMTP_HOST,
