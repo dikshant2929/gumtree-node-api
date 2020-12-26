@@ -14,6 +14,7 @@ router
 router
   .route('/:adId')
   .get(auth('getAd'), validate(AdValidation.getAd), adController.getAd)
+  .post(auth('approveAd'), validate(AdValidation.approveAd), adController.updateAd)
   .patch(auth('updateAd'), validate(AdValidation.updateAd), adController.updateAd)
   .delete(auth('deleteAd'), validate(AdValidation.deleteAd), adController.deleteAd);
 

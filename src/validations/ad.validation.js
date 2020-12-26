@@ -6,8 +6,8 @@ const createAd = {
     title: Joi.string().required(),
     description: Joi.string().required(),
     price : Joi.number(),
-    categoryId : Joi.string().custom(objectId).required(),
-    userId : Joi.string().custom(objectId).required(),
+    category : Joi.string().custom(objectId).required(),
+    user : Joi.string().custom(objectId).required(),
     coverImage : Joi.string(),
     images : Joi.array(),
     attributes : Joi.object(),
@@ -17,7 +17,12 @@ const createAd = {
 
 const getAd = {
   query: Joi.object().keys({
-    adId: Joi.string().custom(objectId)
+    adId: Joi.string().custom(objectId),
+    active : Joi.boolean(),
+    is_deleted : Joi.boolean(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer()  
   }),
 };
 
@@ -40,6 +45,17 @@ const updateAd = {
     .min(1),
 };
 
+const approveAd = {
+  params: Joi.object().keys({
+    adId: Joi.string().custom(objectId)
+}),
+  body: Joi.object()
+    .keys({
+      status : Joi.string()
+    })
+    .min(1),
+};
+
 const deleteAd = {
   params: Joi.object().keys({
     adId: Joi.string().custom(objectId),
@@ -51,4 +67,5 @@ module.exports = {
   getAd,
   updateAd,
   deleteAd,
+  approveAd
 };

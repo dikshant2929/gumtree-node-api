@@ -10,10 +10,14 @@ const createAd = catchAsync(async (req, res) => {
 });
 
 const getAd = catchAsync(async (req, res) => {
-    const filter = pick(req.query, ['name', 'role']);
-    const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  
-    const result = await adService.getAd(req.params.adId ? req.params.adId : "" , filter , options);
+    let result = {};
+    if(req.params.adId){
+        result = await adService.getAdById(req.params.adId);
+    } else{
+        const filter = pick(req.query, ['active', 'is_deleted']);
+        const options = pick(req.query, ['sortBy', 'limit', 'page']);    
+        result = await adService.getAd(filter , options);
+    }
     res.send(result);
 });
 

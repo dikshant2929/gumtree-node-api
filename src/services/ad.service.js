@@ -1,17 +1,20 @@
 
 const httpStatus = require('http-status');
+const { email } = require('../config/config');
 const { Ad } = require('../models');
 const ApiError = require('../utils/ApiError');
 const {commonCheck , checkEmptyObject} = require('../utils/globals');
+const pick = require('../utils/pick');
 
 const categoryService = require('./category.service');
 const userService = require('./user.service');
+
 /**
  * Create am ad
  * @param {Object} adBody
  * @param {string} [adBody.title] - title of ad
  * @param {string} [adBody.description] - description of ad
- * @param {string} [adBody.userId] - Id of user posting ad
+ * @param {string} [adBody.user] - Id of user posting ad
  * @param {string} [adBody.coverImage] - coverimage of ad
  * @param {Array} [adBody.images] - array of images
  * @param {object} [adBody.address] - address of position of ad
@@ -19,11 +22,11 @@ const userService = require('./user.service');
  * @returns {Promise<Ad>}
  */
 const createAd = async (adBody) => {
-    const user = await userService.getUserById(adBody.userId);
+    const user = await userService.getUserById(adBody.user);
     if(!user){
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
-    const category = await categoryService.getCategory(adBody.categoryId);
+    const category = await categoryService.getCategory(adBody.category);
     if(!category){
         throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
     }
@@ -59,12 +62,28 @@ const createAd = async (adBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const getAd = async (id , filter , options) => {
-    // filter.active = true; filter.is_deleted = false;
-    const ads = id ? Ad.findById(id) : Ad.paginate(filter, options);
+const getAd = async (filter , options) => {
+    const ads = Ad.paginate(filter, options);
     return ads;
 };
 
+/**
+ * get ad by id
+ * @param {ObjectId} id
+ * @returns {Promise<Ad>}
+ */
+
+const getAdById =  async (id) => {
+    const data = await Ad.find({_id : id}).populate('user', {'email' : 1 , 'status' : 1 , 'name' : 1}).populate('category' , {'name' : 1}).exec();
+    // let ads = await Ad.findById(id);
+    // if(!ads){
+    //     throw new ApiError(httpStatus.NOT_FOUND, 'Ad not found');
+    // }
+    // need to concanate this in ads
+    // let user = await userService.getUserById(ads.userId);
+    
+    return data;
+};
 
 /**
  * Update ad by id
@@ -73,7 +92,7 @@ const getAd = async (id , filter , options) => {
  * @returns {Promise<Ad>}
  */
 const updateAdById = async (id, updateBody) => {
-  const ad = await getAd(id);
+  const ad = await Ad.findById(id);
   if (!ad) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Ad not found');
   }
@@ -97,6 +116,7 @@ const deleteAdById = async (id) => {
 
 module.exports = {
     getAd,
+    getAdById,
     updateAdById,
     createAd,
     deleteAdById

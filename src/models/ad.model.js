@@ -16,8 +16,9 @@ const adSchema = mongoose.Schema(
         type: Number,
         default: 0,
     },
-    categoryId : {
-      type: String,
+    category : {
+      type: mongoose.Schema.ObjectId,
+      ref : 'Category',
       required: true,
       default: null,
     },
@@ -29,27 +30,35 @@ const adSchema = mongoose.Schema(
         type : Boolean,
         default : false
     },
-    userId : {
-		type : String,
-		required: true,
-		default : null,
-	},
-	coverImage : {
-        type : String,
-        default : null,
-	},
-	images : {
-		type : Array,
-		default : []
-	},
-	address : {
-		type : Object,
-		default : {}
-	},
-	attributes : {
-		type : Object,
-		default : {}
-	}
+    status : {
+      type : String,
+      default : "pending"
+    },
+    user : { 
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required : true
+    },
+    coverImage : {
+          type : String,
+          default : null,
+    },
+    images : {
+      type : Array,
+      default : []
+    },
+    address : {
+      type : Object,
+      default : {}
+    },
+    created_date : {
+      type : Date,
+      default: new Date()
+    },
+    attributes : {
+      type : Object,
+      default : {}
+    }
 	
   },
   {
@@ -61,7 +70,7 @@ const adSchema = mongoose.Schema(
 adSchema.plugin(toJSON);
 adSchema.plugin(paginate);
   
-  
+
 /**
  * @typedef Ad
  */
