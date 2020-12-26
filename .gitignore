@@ -5,7 +5,7 @@ node_modules
 # package-lock.json
 
 # yarn error logs
-yarn-error.log
+#yarn-error.log
 
 # Environment varibales
 .env*
