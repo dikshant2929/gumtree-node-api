@@ -47,6 +47,7 @@ module.exports = {
     imageSize : 2 * 1024 * 1024,
     imageUploadPath : 'static/uploads/'
   },
+  webUrl : envVars.WEBURL,
   imageKitObj : {
     publicKey : envVars.IKTPUBLICKKEY,
     privateKey : envVars.IKTPRIVATEKEY,
@@ -60,6 +61,7 @@ module.exports = {
         user: envVars.SMTP_USERNAME,
         pass: envVars.SMTP_PASSWORD,
       },
+      logger : true
     },
     from: envVars.EMAIL_FROM,
   },
