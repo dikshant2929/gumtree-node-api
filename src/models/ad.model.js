@@ -47,6 +47,10 @@ const adSchema = mongoose.Schema(
       type : Array,
       default : []
     },
+    tags : {
+      type : Array,
+      default : []
+    },
     address : {
       type : Object,
       default : {}

@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { objectId } = require('./custom.validation');
+const { objectId , url } = require('./custom.validation');
 
 const createAd = {
   body: Joi.object().keys({
@@ -8,10 +8,11 @@ const createAd = {
     price : Joi.number(),
     category : Joi.string().custom(objectId).required(),
     user : Joi.string().custom(objectId).required(),
-    coverImage : Joi.string(),
+    coverImage : Joi.string().custom(url),
     images : Joi.array(),
     attributes : Joi.object(),
-    address : Joi.object()
+    address : Joi.object(),
+    tags : Joi.array()
   }),
 };
 
@@ -35,7 +36,7 @@ const updateAd = {
         title: Joi.string(),
         description: Joi.string(),
         price : Joi.number(),
-        coverImage : Joi.string(),
+        coverImage : Joi.string().custom(url),
         images : Joi.array(),
         attributes : Joi.object(),
         address : Joi.object(),

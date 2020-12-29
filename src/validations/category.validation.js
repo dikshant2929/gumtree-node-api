@@ -1,11 +1,12 @@
 const Joi = require('joi');
+const { objectId , url } = require('./custom.validation');
 
 const createCategory = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     status: Joi.number(),
     fieldType : Joi.string(),
-    iconUrl : Joi.string()
+    iconUrl : Joi.string().custom(url)
   }),
 };
 
@@ -23,7 +24,7 @@ const updateCategory = {
     .keys({
       name: Joi.string(),
       status : Joi.number(),
-      iconUrl : Joi.string()
+      iconUrl : Joi.string().custom(url)
     })
     .min(1),
 };

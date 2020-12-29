@@ -1,14 +1,15 @@
 const Joi = require('joi');
-const { objectId } = require('./custom.validation');
+const { objectId , url } = require('./custom.validation');
 
 const createPlan = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     description: Joi.string(),
     time_period : Joi.number(),
-    imgUrl : Joi.string(),
+    imgUrl : Joi.string().custom(url),
     price : Joi.number(),
-    attributes : Joi.object()
+    attributes : Joi.object(),
+    active : Joi.boolean()
   }),
 };
 
@@ -31,7 +32,7 @@ const updatePlan = {
         title: Joi.string(),
         description: Joi.string(),
         time_period : Joi.number(),
-        imgUrl : Joi.string(),
+        imgUrl : Joi.string().custom(url),
         price : Joi.number(),
         attributes : Joi.object(),
         active : Joi.boolean()
