@@ -4,6 +4,7 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
+const { sendOTP } = require('../services/email.service');
 
 /**
  * Login with username and password
@@ -77,9 +78,57 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
   }
 };
 
+
+/**
+ * Verify users using otp
+ * @param {string} otp
+ * @param {string} userId
+ * @returns {Promise}
+ */
+const verifyUserUsingOtp = async (otp, userId) => {
+  try {
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    if(!await user.isOtpMatch(otp)){
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'otp not matched');
+    }
+    await userService.updateUserById(user.id , { verified : true });
+    return user;
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Otp verification failed');
+  }
+};
+
+
+/**
+ * resend otp to email
+ * @param {string} userId
+ * @returns {Promise}
+ */
+const resendOtp = async (userId) => {
+  try {
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    
+    let otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+    await userService.updateUserById(userId , { otp : otp })
+    sendOTP(user.email, otp);
+    return user;
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Otp verification failed');
+  }
+};
+
+
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,
+  verifyUserUsingOtp,
+  resendOtp
 };

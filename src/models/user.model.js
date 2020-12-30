@@ -83,6 +83,16 @@ userSchema.methods.isPasswordMatch = async function (password) {
   return bcrypt.compare(password, user.password);
 };
 
+/**
+ * Check if OTP matches the user's OTP
+ * @param {string} otp
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.isOtpMatch = async function (otp) {
+  const user = this;
+  return otp === user.otp;
+};
+
 userSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {

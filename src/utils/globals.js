@@ -5,7 +5,6 @@
  * @returns {Object}
  */
 const commonCheck = (req, req_data, key) => {
-    console.log(req.req_data)
 	key = key || 'body';
 	if(!req_data.length) {
 		return '';
@@ -39,7 +38,23 @@ const checkEmptyObject = (obj) => {
     return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
+
+/**
+ * remove fields from object 
+ * @param {string[]} fields
+ * @param {Object} object
+ * @returns {Object}
+ */
+
+const removeFieldFromObj = (fields , obj) => {
+	fields && fields.length && fields.forEach(element => {
+		obj[element] = undefined;
+	});
+	return obj;
+  }
+
 module.exports = {
     commonCheck,
-    checkEmptyObject,
+	checkEmptyObject,
+	removeFieldFromObj
 }

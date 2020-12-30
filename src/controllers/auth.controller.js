@@ -1,11 +1,12 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
+const {removeFieldFromObj} = require('../utils/globals');
 
 const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
+  let user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  res.status(httpStatus.CREATED).send({ user : removeFieldFromObj(['otp'] , user ) , tokens });
 });
 
 const login = catchAsync(async (req, res) => {
@@ -24,6 +25,18 @@ const refreshTokens = catchAsync(async (req, res) => {
   const tokens = await authService.refreshAuth(req.body.refreshToken);
   res.send({ ...tokens });
 });
+
+const verify = catchAsync(async (req, res) => {
+  const user = await authService.verifyUserUsingOtp(req.body.otp , req.params.userId);
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.send({ user : removeFieldFromObj(['otp'] , user ) , tokens });
+});
+
+const resendOtp = catchAsync(async (req, res) => {
+  await authService.resendOtp(req.params.userId);
+  res.send("Otp resent successfully");
+});
+
 
 const forgotPassword = catchAsync(async (req, res) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
@@ -44,4 +57,6 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
+  verify,
+  resendOtp
 };
