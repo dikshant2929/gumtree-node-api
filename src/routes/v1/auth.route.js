@@ -14,4 +14,11 @@ router.post('/refresh-tokens', validate(authValidation.refreshTokens), authContr
 router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
 router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
+router.post('/forgot-password/otp', validate(authValidation.otpToMobile), authController.forgotPasswordByOtpSend);
+router.post('/forgot-password/otp/:id', validate(authValidation.validateOtp), authController.forgotPasswordByOtpValidate);
+
+router.post('/send-otp', validate(authValidation.otpToMobile), authController.sendOtp);
+router.patch('/validate-otp/:id', validate(authValidation.validateOtp), authController.validateOtp);
+
+
 module.exports = router;

@@ -57,6 +57,22 @@ const resetPassword = {
   }),
 };
 
+const otpToMobile = {
+  body : Joi.object().keys({
+    mobile: Joi.string(),
+    email: Joi.string()
+  })
+}
+
+const validateOtp = {
+  
+  params : Joi.object().keys({
+    id: Joi.string().custom(objectId),
+  }),
+  body : Joi.object().keys({
+    otp: Joi.string().required()
+  })
+}
 module.exports = {
   register,
   login,
@@ -65,5 +81,7 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
-  resendOtp
+  resendOtp,
+  otpToMobile,
+  validateOtp
 };

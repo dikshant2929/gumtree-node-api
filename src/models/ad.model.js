@@ -22,6 +22,11 @@ const adSchema = mongoose.Schema(
       required: true,
       default: null,
     },
+    subscription : {
+      type: mongoose.Schema.ObjectId,
+      ref : 'Plan',
+      default: null,  
+    },
     active :{
       type : Boolean,
       default : true

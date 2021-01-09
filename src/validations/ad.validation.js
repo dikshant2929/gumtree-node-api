@@ -36,6 +36,7 @@ const updateAd = {
         title: Joi.string(),
         description: Joi.string(),
         price : Joi.number(),
+        subscription : Joi.custom(objectId),
         coverImage : Joi.string().custom(url),
         images : Joi.array(),
         attributes : Joi.object(),

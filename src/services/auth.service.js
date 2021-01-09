@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
+const otpService = require('./otp.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
@@ -123,6 +124,36 @@ const resendOtp = async (userId) => {
   }
 };
 
+/**
+ * send otp to mobile
+ * @param {string} mobile
+ * @returns {Promise}
+ */
+const sendOtp = async (mobile, email) => {
+  try {
+    let otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+    return await otpService.sendOtp(email , mobile ,otp);
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'unable to send otp');
+  }
+};
+
+/**
+ * send otp to mobile
+ * @param {string} id
+ * @returns {Promise}
+ */
+const validateOtp = async (id , otp) => {
+  try {
+    return await otpService.validateOtp(id , otp)
+    
+  } catch (error) {
+    console.log(error)
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Otp verification failed');
+  }
+};
+
+
 
 module.exports = {
   loginUserWithEmailAndPassword,
@@ -130,5 +161,7 @@ module.exports = {
   refreshAuth,
   resetPassword,
   verifyUserUsingOtp,
-  resendOtp
+  resendOtp,
+  validateOtp,
+  sendOtp
 };

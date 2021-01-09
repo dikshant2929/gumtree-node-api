@@ -32,7 +32,7 @@ const updateUser = {
   }),
   body: Joi.object()
     .keys({
-      email: Joi.string().email(),
+      phone: Joi.string(),
       password: Joi.string().custom(password),
       name: Joi.string(),
       status : Joi.number(),

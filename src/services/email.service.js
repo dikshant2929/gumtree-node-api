@@ -48,9 +48,18 @@ const sendOTP = async (to, otp) => {
   await sendEmail(to, subject, text);
 };
 
+const sendOTPForgotPassword = async (to, otp) => {
+  const subject = 'Reset your password';
+  const text = `Dear user,
+  To reset your password, enter this code into your app : ${otp}
+  If you did not register to GumTree, then ignore this email.`;
+  await sendEmail(to, subject, text);
+};
+
 module.exports = {
   transport,
   sendEmail,
   sendResetPasswordEmail,
   sendOTP,
+  sendOTPForgotPassword
 };

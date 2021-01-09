@@ -2,6 +2,8 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const {removeFieldFromObj} = require('../utils/globals');
+const { User } = require('../models');
+const { http } = require('../config/logger');
 
 const register = catchAsync(async (req, res) => {
   let user = await userService.createUser(req.body);
@@ -49,6 +51,31 @@ const resetPassword = catchAsync(async (req, res) => {
   res.send({status : true , message : "Password changes successfully"});
 });
 
+const sendOtp = catchAsync(async (req, res) => {
+  res.json(await authService.sendOtp(req.body.mobile , req.body.email));
+});
+
+const validateOtp = catchAsync(async (req, res) => {
+  await authService.validateOtp(req.params.id, req.body.otp);
+  res.send({status : true , message : "otp validated successfully"});
+});
+
+const forgotPasswordByOtpSend = catchAsync(async (req, res) => {
+  if(!await userService.getUserByEmail(req.body.email)){
+    res.status(httpStatus.NOT_FOUND).send({message : "User not found"})  
+  } 
+  else
+    res.json(await authService.sendOtp(req.body.mobile , req.body.email));
+
+});
+
+
+const forgotPasswordByOtpValidate = catchAsync(async (req, res) => {
+  const user = await authService.validateOtp(req.params.id, req.body.otp);
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(user.email);
+  res.send({status : true , resetPasswordToken : resetPasswordToken , message : "otp validated successfully"});
+});
+
 
 module.exports = {
   register,
@@ -58,5 +85,9 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verify,
-  resendOtp
+  resendOtp,
+  sendOtp,
+  validateOtp,
+  forgotPasswordByOtpSend,
+  forgotPasswordByOtpValidate
 };
