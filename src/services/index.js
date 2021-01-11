@@ -6,6 +6,8 @@ module.exports.categoryService = require('./category.service');
 module.exports.adService = require('./ad.service');
 module.exports.planService = require('./plan.service');
 module.exports.otpService = require('./otp.service');
+module.exports.chatService = require('./chat.service');
+
 
 
 
