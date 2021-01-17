@@ -8,7 +8,7 @@ const { http } = require('../config/logger');
 const register = catchAsync(async (req, res) => {
   let user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user : removeFieldFromObj(['otp'] , user ) , tokens });
+  res.status(httpStatus.CREATED).send({ user : user/* removeFieldFromObj(['otp'] , user )*/ , tokens });
 });
 
 const login = catchAsync(async (req, res) => {
