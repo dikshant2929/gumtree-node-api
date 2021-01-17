@@ -110,13 +110,13 @@ const verifyUserUsingOtp = async (otp, userId) => {
  */
 const resendOtp = async (userId) => {
   try {
-    const user = await userService.getUserById(userId);
+    let user = await userService.getUserById(userId);
     if (!user) {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
     
     let otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-    await userService.updateUserById(userId , { otp : otp })
+    user = await userService.updateUserById(userId , { otp : otp })
     sendOTP(user.email, otp);
     return user;
   } catch (error) {

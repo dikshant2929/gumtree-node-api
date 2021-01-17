@@ -35,8 +35,8 @@ const verify = catchAsync(async (req, res) => {
 });
 
 const resendOtp = catchAsync(async (req, res) => {
-  await authService.resendOtp(req.params.userId);
-  res.send("Otp resent successfully");
+  const user = await authService.resendOtp(req.params.userId);
+  res.send({message : "Otp resent successfully" , user : user});
 });
 
 
